@@ -1,0 +1,6 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
+<ul>
+<li><a href="{% url 'polls:detail' question.id %}">{{ 添加配料单 }}</a></li>
+</ul>
