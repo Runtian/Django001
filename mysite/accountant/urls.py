@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'burdensheet/add/$', views.AddBurdenSheetView.as_view(), name='burdensheet-add'),
+    url(r'burdensheet/send_file/$', views.send_file, name='sned_file'),
 ]
