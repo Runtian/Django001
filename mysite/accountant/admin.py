@@ -26,6 +26,7 @@ class CustomerProductInline(admin.TabularInline):
 
 
 class BurdenSheetAdmin(admin.ModelAdmin):
+    list_display = ('date', 'customer', 'description', 'total_payable')
     inlines = [
         ProductOrderInline,
         CustomerProductInline,
