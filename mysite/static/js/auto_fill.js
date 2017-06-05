@@ -1,0 +1,132 @@
+if (!$) {
+    $ = django.jQuery;
+}
+
+function get_value(target_id) {
+	var val = $('#' + target_id).val();
+	var rst = parseFloat(val)
+	if (rst ) {
+		return rst;
+	}
+	return 0;
+}
+
+
+function updateAccountPayable(e) {
+	var target_id = e.currentTarget.id;
+	var price_id = null;
+	var amount_id = null;
+	var discount_id = null;
+	var account_payable_id = null;
+
+	if (target_id.endsWith('price')) {
+		price_id = target_id;
+		amount_id = target_id.replace('price', 'amount');
+		discount_id = target_id.replace('price', 'discount');
+		account_payable_id = target_id.replace('price', 'account_payable');
+	} else if (target_id.endsWith('amount')) {
+		amount_id = target_id;
+		price_id = target_id.replace('amount', 'price');
+		discount_id = target_id.replace('amount', 'discount');
+		account_payable_id = target_id.replace('amount', 'account_payable');
+	} else if (target_id.endsWith('discount')) {
+		discount_id = target_id;
+		price_id = target_id.replace('discount', 'price');
+		amount_id = target_id.replace('discount', 'amount');
+		account_payable_id = target_id.replace('discount', 'account_payable');
+	}
+
+	var price = get_value(price_id);
+	var amount = get_value(amount_id);
+	var discount = get_value(discount_id);
+	$('#' + account_payable_id).val(price * amount - discount).change();
+}
+
+
+function updateTotalPayable() {
+	var num_product_orders = $('#id_productorder_set-TOTAL_FORMS').val();
+	var total = 0;
+	for (var i = 0; i < num_product_orders; i++) {
+		var account_payable_id = "id_productorder_set-" + i.toString() + "-account_payable";
+		total += get_value(account_payable_id);
+	}
+	$('#id_total_payable').val(total);
+}
+
+function updateTotalDiscount() {
+	var num_product_orders = $('#id_productorder_set-TOTAL_FORMS').val();
+	var total = 0;
+	for (var i = 0; i < num_product_orders; i++) {
+		var discount_id = "id_productorder_set-" + i.toString() + "-discount";
+		total += get_value(discount_id);
+	}
+	$('#id_total_discount').val(total);
+}
+
+function updateTotalAmount() {
+	var num_product_orders = $('#id_productorder_set-TOTAL_FORMS').val();
+	var total = 0;
+	for (var i = 0; i < num_product_orders; i++) {
+		var amount_id = "id_productorder_set-" + i.toString() + "-amount";
+		total += get_value(amount_id);
+	}
+	var num_customer_product = $('#id_customerproduct_set-TOTAL_FORMS').val();
+	for (var i = 0; i < num_customer_product; i++) {
+		var amount_id = "id_customerproduct_set-" + i.toString() + "-amount";
+		total += get_value(amount_id);
+	}
+	$('#id_total_amount').val(total);
+}
+
+$(document).ready(function() {
+	console.log("ready!");
+	var num_product_orders = $('#id_productorder_set-TOTAL_FORMS').val();
+	for (var i = 0; i < num_product_orders; i++) {
+		var price_id = "id_productorder_set-" + i.toString() + "-price";
+		var amount_id = "id_productorder_set-" + i.toString() + "-amount";
+		var discount_id = "id_productorder_set-" + i.toString() + "-discount";
+		var account_payable_id = "id_productorder_set-" + i.toString() + "-account_payable";
+		$('#' + price_id).on('input', updateAccountPayable);
+		$('#' + amount_id).on('input', updateAccountPayable);
+		$('#' + amount_id).on('input', updateTotalAmount);
+		$('#' + discount_id).on('input', updateAccountPayable);
+		$('#' + discount_id).on('input', updateTotalDiscount);
+		$('#' + account_payable_id).on('change', updateTotalPayable);
+
+		
+	}
+
+	var num_customer_product = $('#id_customerproduct_set-TOTAL_FORMS').val();
+	for (var i = 0; i < num_customer_product; i++) {
+		var amount_id = "id_customerproduct_set-" + i.toString() + "-amount";
+		$('#' + amount_id).on('input', updateTotalAmount);
+	}
+	
+});
+
+(function($) {
+    $(document).on('formset:added', function(event, $row, formsetName) {
+        
+    	var row_id = $row[0].id;
+    	var price_id = "id_" + row_id + "-price";
+		var amount_id = "id_" + row_id + "-amount";
+		var discount_id = "id_" + row_id + "-discount";
+		var account_payable_id = "id_" + row_id + "-account_payable";
+		$('#' + price_id).on('input', updateAccountPayable);
+		$('#' + amount_id).on('input', updateAccountPayable);
+		$('#' + amount_id).on('input', updateTotalAmount);
+		$('#' + discount_id).on('input', updateAccountPayable);
+		$('#' + discount_id).on('input', updateTotalDiscount);
+		$('#' + account_payable_id).on('input', updateTotalPayable);
+
+
+    });
+
+    $(document).on('formset:removed', function(event, $row, formsetName) {
+        // Row removed
+        updateTotalPayable();
+        updateTotalDiscount();
+        updateTotalAmount();
+    });
+})(django.jQuery);
+console.log("lalalalalala");
