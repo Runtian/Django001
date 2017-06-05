@@ -17,6 +17,13 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
+@python_2_unicode_compatible  # only if you need to support Python 2
+class Source(models.Model):
+    name = models.CharField("姓名", max_length=200, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class ProductName(models.Model):
@@ -76,11 +83,26 @@ class ProductOrder(models.Model):
     amount = models.FloatField("重量", blank=False)
     price = models.FloatField("单价", blank=False)
     discount = models.FloatField("优惠", blank=False)
-    account_payable = models.FloatField("应付款", blank=False)
+    account_payable = models.FloatField("应收款", blank=False)
     date = models.DateField("生产日期", blank=False, default=datetime.date.today)
 
     def __str__(self):
         return self.name.name
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
+class ProductPurchase(models.Model):
+    name = models.ForeignKey(ProductName, verbose_name="名称", null=True, on_delete=models.SET_NULL, blank=False)
+    source = models.ForeignKey(Source, verbose_name="进货源", on_delete=models.CASCADE, blank=False)
+    amount = models.FloatField("重量", blank=False)
+    price = models.FloatField("单价", blank=False)
+    discount = models.FloatField("优惠", blank=False)
+    account_payable = models.FloatField("应付款", blank=False)
+    date = models.DateField("购买日期", blank=False, default=datetime.date.today)
+
+    def __str__(self):
+        return self.name.name
+
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class CustomerProduct(models.Model):
@@ -91,6 +113,3 @@ class CustomerProduct(models.Model):
 
     def __str__(self):
         return self.name.name
-
-
-

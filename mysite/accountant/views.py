@@ -10,12 +10,7 @@ import os, tempfile, zipfile
 from wsgiref.util import FileWrapper
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
-
-
-class AddBurdenSheetView(CreateView):
-    template_name = 'accountant/edit_burden_sheet.html'
-    form_class = BurdenSheetForm
+    return render(request, 'accountant/index.html')
 
 def send_file(request):
     """                                                                         

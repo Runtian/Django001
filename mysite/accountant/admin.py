@@ -7,7 +7,7 @@ logger = logging.getLogger("django.server")
 from django.contrib import admin
 
 # Register your models here.
-from .models import BurdenSheet, ProductOrder, ProductName, Customer, CustomerProduct
+from .models import BurdenSheet, ProductOrder, ProductName, Customer, CustomerProduct, ProductPurchase
 
 
 class ProductOrderInline(admin.TabularInline):
@@ -68,5 +68,7 @@ class BurdenSheetAdmin(admin.ModelAdmin):
 
 
 admin.site.register(BurdenSheet, BurdenSheetAdmin)
+admin.site.register(ProductPurchase)
 admin.site.register(ProductName)
 admin.site.register(Customer)
+
