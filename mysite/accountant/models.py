@@ -44,7 +44,6 @@ class BurdenSheet(models.Model):
     description = models.CharField("摘要", max_length=200, blank=False)
     total_amount = models.FloatField("投料总量", blank=False)
     total_payable = models.FloatField("应付合计", blank=False)
-    total_discount = models.FloatField("折扣合计", blank=False, default=0)
     date = models.DateField("生产日期", blank=False)
     time_stamp = models.DateTimeField("time stamp", auto_now_add=True)
 
@@ -82,7 +81,6 @@ class ProductOrder(models.Model):
     burden_sheet = models.ForeignKey(BurdenSheet, on_delete=models.CASCADE, blank=False)
     amount = models.FloatField("重量", blank=False)
     price = models.FloatField("单价", blank=False)
-    discount = models.FloatField("优惠", blank=False)
     account_payable = models.FloatField("应收款", blank=False)
     date = models.DateField("生产日期", blank=False, default=datetime.date.today)
 
@@ -96,7 +94,6 @@ class ProductPurchase(models.Model):
     source = models.ForeignKey(Source, verbose_name="进货源", on_delete=models.CASCADE, blank=False)
     amount = models.FloatField("重量", blank=False)
     price = models.FloatField("单价", blank=False)
-    discount = models.FloatField("优惠", blank=False)
     account_payable = models.FloatField("应付款", blank=False)
     date = models.DateField("购买日期", blank=False, default=datetime.date.today)
 
