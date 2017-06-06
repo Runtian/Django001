@@ -7,7 +7,7 @@ logger = logging.getLogger("django.server")
 from django.contrib import admin
 
 # Register your models here.
-from .models import (BurdenSheet, ProductOrder, ProductName,
+from .models import (BurdenSheet, ProductOrder, ProductName, Source,
                      CustomerProduct, ProductPurchase, ProcessingFee,
                      Payer, Income, Payee, Expense)
 
@@ -45,7 +45,7 @@ class BurdenSheetAdmin(admin.ModelAdmin):
     exclude = ('time_stamp',)
 
     class Media:
-        js = ("js/auto_fill.js",)
+        js = ("js/auto_fill.js?1",)
 
     def update_burden_sheet(self, obj):
         product_orders = ProductOrder.objects.filter(burden_sheet=obj)
@@ -76,14 +76,19 @@ class BurdenSheetAdmin(admin.ModelAdmin):
         if formset.deleted_objects:
             self.update_burden_sheet(obj)
 
+class ProductPurchaseAdmin(admin.ModelAdmin):
+    list_display = ('date', 'name', 'source', 'account_payable')
+
 
 admin.site.register(BurdenSheet, BurdenSheetAdmin)
-admin.site.register(ProductPurchase)
-admin.site.register(ProductName)
-
-admin.site.register(Payer)
-admin.site.register(Payee)
+admin.site.register(ProductPurchase, ProductPurchaseAdmin)
 admin.site.register(Income)
 admin.site.register(Expense)
+
+admin.site.register(Source)
+admin.site.register(ProductName)
+admin.site.register(Payer)
+admin.site.register(Payee)
+
 
 

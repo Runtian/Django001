@@ -53,6 +53,8 @@ class Payer(models.Model):
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class Income(models.Model):
+    list_display = ('date', 'payer')
+
     payer = models.ForeignKey(Payer, verbose_name="付款人", null=True, on_delete=models.CASCADE, blank=False)
     description = models.CharField("摘要", max_length=200, blank=False)
     amount = models.FloatField("金额", blank=False)
