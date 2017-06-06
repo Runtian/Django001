@@ -77,8 +77,9 @@ class BurdenSheetAdmin(admin.ModelAdmin):
             self.update_burden_sheet(obj)
 
 class ProductPurchaseAdmin(admin.ModelAdmin):
-    list_display = ('date', 'name', 'source', 'account_payable')
-
+    list_display = ('date', 'source', 'name', 'account_payable')
+    class Media:
+        js = ("js/product_purchase_auto_fill.js",)
 
 admin.site.register(BurdenSheet, BurdenSheetAdmin)
 admin.site.register(ProductPurchase, ProductPurchaseAdmin)

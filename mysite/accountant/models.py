@@ -165,8 +165,8 @@ class ProcessingFee(models.Model):
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class ProductPurchase(models.Model):
-    name = models.ForeignKey(ProductName, verbose_name="名称", null=True, on_delete=models.SET_NULL, blank=False)
     source = models.ForeignKey(Source, verbose_name="进货源", on_delete=models.CASCADE, blank=False)
+    name = models.ForeignKey(ProductName, verbose_name="名称", null=True, on_delete=models.SET_NULL, blank=False)
     amount = models.FloatField("重量", blank=False)
     price = models.FloatField("单价", blank=False)
     account_payable = models.FloatField("应付款", blank=False)
