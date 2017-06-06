@@ -34,13 +34,21 @@ class ProductName(models.Model):
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
+class ProcessingType(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField("种类", max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
 class BurdenSheet(models.Model):
 
     initial_date = None
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(Customer, verbose_name="客户", max_length=200, blank=False)
-
     description = models.CharField("摘要", max_length=200, blank=False)
     total_amount = models.FloatField("投料总量", blank=False)
     total_payable = models.FloatField("应付合计", blank=False)
@@ -61,12 +69,16 @@ class BurdenSheet(models.Model):
             # date changed - do something here
             product_orders = ProductOrder.objects.filter(burden_sheet=self)
             customer_products = CustomerProduct.objects.filter(burden_sheet=self)
+            processing_fees = ProcessingFee.objects.filter(burden_sheet=self)
             for product_order in product_orders:
                 product_order.date = self.date
                 product_order.save()
             for customer_product in customer_products:
                 customer_product.date = self.date
                 customer_product.save()
+            for processing_fee in processing_fees:
+                processing_fee.date = self.date
+                processing_fee.save()
 
         super(BurdenSheet, self).save(force_insert, force_update, *args, **kwargs)
         self.initial_date = self.date
@@ -86,6 +98,19 @@ class ProductOrder(models.Model):
 
     def __str__(self):
         return self.name.name
+
+@python_2_unicode_compatible  # only if you need to support Python 2
+class ProcessingFee(models.Model):
+    processing_type = models.ForeignKey(ProcessingType, verbose_name="种类", blank=False)
+    description = models.CharField("摘要", max_length=200, blank=False)
+    burden_sheet = models.ForeignKey(BurdenSheet, on_delete=models.CASCADE, blank=False)
+    amount = models.FloatField("重量", blank=False)
+    price = models.FloatField("单价", blank=False)
+    account_payable = models.FloatField("应收款", blank=False)
+    date = models.DateField("生产日期", blank=False, default=datetime.date.today)
+
+    def __str__(self):
+        return self.description
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2

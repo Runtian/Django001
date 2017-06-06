@@ -35,10 +35,16 @@ function updateAccountPayable(e) {
 
 
 function updateTotalPayable() {
-	var num_product_orders = $('#id_productorder_set-TOTAL_FORMS').val();
 	var total = 0;
+	var num_product_orders = $('#id_productorder_set-TOTAL_FORMS').val();
 	for (var i = 0; i < num_product_orders; i++) {
 		var account_payable_id = "id_productorder_set-" + i.toString() + "-account_payable";
+		total += get_value(account_payable_id);
+	}
+
+	var num_processing_fees = $('#id_processingfee_set-TOTAL_FORMS').val();
+	for (var i = 0; i < num_processing_fees; i++) {
+		var account_payable_id = "id_processingfee_set-" + i.toString() + "-account_payable";
 		total += get_value(account_payable_id);
 	}
 	$('#id_total_payable').val(total);
@@ -72,6 +78,16 @@ $(document).ready(function() {
 		$('#' + account_payable_id).on('change', updateTotalPayable);
 	}
 
+	var num_processing_fees = $('#id_processingfee_set-TOTAL_FORMS').val();
+	for (var i = 0; i < num_processing_fees; i++) {
+		var price_id = "id_processingfee_set-" + i.toString() + "-price";
+		var amount_id = "id_processingfee_set-" + i.toString() + "-amount";
+		var account_payable_id = "id_processingfee_set-" + i.toString() + "-account_payable";
+		$('#' + price_id).on('input', updateAccountPayable);
+		$('#' + amount_id).on('input', updateAccountPayable);
+		$('#' + account_payable_id).on('change', updateTotalPayable);
+	}
+
 	var num_customer_product = $('#id_customerproduct_set-TOTAL_FORMS').val();
 	for (var i = 0; i < num_customer_product; i++) {
 		var amount_id = "id_customerproduct_set-" + i.toString() + "-amount";
@@ -90,7 +106,7 @@ $(document).ready(function() {
 		$('#' + price_id).on('input', updateAccountPayable);
 		$('#' + amount_id).on('input', updateAccountPayable);
 		$('#' + amount_id).on('input', updateTotalAmount);
-		$('#' + account_payable_id).on('input', updateTotalPayable);
+		$('#' + account_payable_id).on('change', updateTotalPayable);
     });
 
     $(document).on('formset:removed', function(event, $row, formsetName) {

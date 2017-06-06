@@ -7,13 +7,21 @@ logger = logging.getLogger("django.server")
 from django.contrib import admin
 
 # Register your models here.
-from .models import BurdenSheet, ProductOrder, ProductName, Customer, CustomerProduct, ProductPurchase
+from .models import (BurdenSheet, ProductOrder, ProductName, Customer,
+                     CustomerProduct, ProductPurchase, ProcessingFee)
 
 
 class ProductOrderInline(admin.TabularInline):
     verbose_name = "公司备料"
     model = ProductOrder
     #readonly_fields = ('account_payable',)
+    extra = 3
+    exclude = ('date',)
+
+
+class ProcessingFeeInline(admin.TabularInline):
+    verbose_name = "加工费"
+    model = ProcessingFee
     extra = 3
     exclude = ('date',)
 
@@ -29,6 +37,7 @@ class BurdenSheetAdmin(admin.ModelAdmin):
     list_display = ('date', 'customer', 'description', 'total_payable')
     inlines = [
         ProductOrderInline,
+        ProcessingFeeInline,
         CustomerProductInline,
     ]
     #readonly_fields = ('total_amount', 'total_payable', 'total_discount',)
