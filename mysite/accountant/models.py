@@ -42,13 +42,44 @@ class ProcessingType(models.Model):
         return self.name
 
 
-# @python_2_unicode_compatible  # only if you need to support Python 2
-# class ProcessingType(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField("种类", max_length=200)
+@python_2_unicode_compatible  # only if you need to support Python 2
+class Payer(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField("付款人", max_length=200)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
+class Income(models.Model):
+    payer = models.ForeignKey(Payer, verbose_name="付款人", null=True, on_delete=models.CASCADE, blank=False)
+    description = models.CharField("摘要", max_length=200, blank=False)
+    amount = models.FloatField("金额", blank=False)
+    date = models.DateField("日期", blank=False, default=datetime.date.today)
+
+    def __str__(self):
+        return self.description
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
+class Payee(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField("收款人/用途", max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
+class Expense(models.Model):
+    Payee = models.ForeignKey(Payee, verbose_name="收款人/用途", null=True, on_delete=models.CASCADE, blank=False)
+    description = models.CharField("摘要", max_length=200, blank=False)
+    amount = models.FloatField("金额", blank=False)
+    date = models.DateField("日期", blank=False, default=datetime.date.today)
+
+    def __str__(self):
+        return self.description
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
