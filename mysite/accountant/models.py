@@ -10,12 +10,12 @@ logger = logging.getLogger("django.server")
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
-@python_2_unicode_compatible  # only if you need to support Python 2
-class Customer(models.Model):
-    name = models.CharField("姓名", max_length=200, primary_key=True)
+# @python_2_unicode_compatible  # only if you need to support Python 2
+# class Customer(models.Model):
+#     name = models.CharField("姓名", max_length=200, primary_key=True)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class Source(models.Model):
@@ -88,7 +88,7 @@ class BurdenSheet(models.Model):
     initial_date = None
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey(Customer, verbose_name="客户", max_length=200, blank=False)
+    customer = models.ForeignKey(Payer, verbose_name="客户", max_length=200, blank=False)
     description = models.CharField("摘要", max_length=200, blank=False)
     total_amount = models.FloatField("投料总量", blank=False)
     total_payable = models.FloatField("应付合计", blank=False)

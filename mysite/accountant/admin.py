@@ -7,7 +7,7 @@ logger = logging.getLogger("django.server")
 from django.contrib import admin
 
 # Register your models here.
-from .models import (BurdenSheet, ProductOrder, ProductName, Customer,
+from .models import (BurdenSheet, ProductOrder, ProductName,
                      CustomerProduct, ProductPurchase, ProcessingFee,
                      Payer, Income, Payee, Expense)
 
@@ -80,7 +80,6 @@ class BurdenSheetAdmin(admin.ModelAdmin):
 admin.site.register(BurdenSheet, BurdenSheetAdmin)
 admin.site.register(ProductPurchase)
 admin.site.register(ProductName)
-admin.site.register(Customer)
 
 admin.site.register(Payer)
 admin.site.register(Payee)
