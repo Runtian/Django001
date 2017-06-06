@@ -45,7 +45,7 @@ class BurdenSheetAdmin(admin.ModelAdmin):
     exclude = ('time_stamp',)
 
     class Media:
-        js = ("js/auto_fill.js?1",)
+        js = ("js/auto_fill?1.js",)
 
     def update_burden_sheet(self, obj):
         product_orders = ProductOrder.objects.filter(burden_sheet=obj)
