@@ -49,17 +49,16 @@ class BurdenSheetAdmin(admin.ModelAdmin):
     def update_burden_sheet(self, obj):
         product_orders = ProductOrder.objects.filter(burden_sheet=obj)
         customer_products = CustomerProduct.objects.filter(burden_sheet=obj)
-        total_discount = 0
+        processing_fees = ProcessingFee.objects.filter(burden_sheet=obj)
         total_payable = 0
         total_amount = 0
         for product_order in product_orders:
-            total_discount += product_order.discount
             total_payable += product_order.account_payable
             total_amount += product_order.amount
-
+        for processing_fee in processing_fees:
+            total_payable += processing_fee.account_payable
         for customer_product in customer_products:
             total_amount += customer_product.amount
-        obj.total_discount = total_discount
         obj.total_amount = total_amount
         obj.total_payable = total_payable
         obj.save()

@@ -42,6 +42,15 @@ class ProcessingType(models.Model):
         return self.name
 
 
+# @python_2_unicode_compatible  # only if you need to support Python 2
+# class ProcessingType(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     name = models.CharField("种类", max_length=200)
+
+#     def __str__(self):
+#         return self.name
+
+
 @python_2_unicode_compatible  # only if you need to support Python 2
 class BurdenSheet(models.Model):
 
