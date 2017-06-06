@@ -9,7 +9,7 @@ from django.contrib import admin
 # Register your models here.
 from .models import (BurdenSheet, ProductOrder, ProductName, Source,
                      CustomerProduct, ProductPurchase, ProcessingFee,
-                     Payer, Income, Payee, Expense)
+                     Payer, Income, Payee, Expense, CustomerProductName)
 
 
 class ProductOrderInline(admin.TabularInline):
@@ -82,6 +82,8 @@ class ProductPurchaseAdmin(admin.ModelAdmin):
 
 admin.site.register(BurdenSheet, BurdenSheetAdmin)
 admin.site.register(ProductPurchase, ProductPurchaseAdmin)
+
+admin.site.register(CustomerProductName)
 admin.site.register(Income)
 admin.site.register(Expense)
 

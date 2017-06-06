@@ -34,6 +34,14 @@ class ProductName(models.Model):
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
+class CustomerProductName(models.Model):
+    name = models.CharField("名称", max_length=200, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
 class ProcessingType(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField("种类", max_length=200)
@@ -170,7 +178,7 @@ class ProductPurchase(models.Model):
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class CustomerProduct(models.Model):
-    name = models.ForeignKey(ProductName, verbose_name="名称", null=True, on_delete=models.SET_NULL, blank=False)
+    name = models.ForeignKey(CustomerProductName, verbose_name="名称", null=True, on_delete=models.SET_NULL, blank=False)
     burden_sheet = models.ForeignKey(BurdenSheet, on_delete=models.CASCADE, blank=False)
     amount = models.FloatField("重量", blank=False)
     date = models.DateField("生产日期", blank=False, default=datetime.date.today)
