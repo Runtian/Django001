@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponseRedirect, HttpResponse
+
+from django.core import serializers
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -7,9 +9,19 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 import os, tempfile, zipfile
 from wsgiref.util import FileWrapper
+from .models import (BurdenSheet, ProductOrder)
 
 def index(request):
     return render(request, 'accountant/index.html')
+
+def show_customer_statement(request):
+    return render(request, 'accountant/customer_statement.html')
+
+def customer_statement(request):
+    if request.method == 'GET':
+        objs = ProductOrder.objects.all()
+        data = serializers.serialize('json', objs)
+    return JsonResponse(data, safe=False)
 
 def send_file(request):
     """                                                                         

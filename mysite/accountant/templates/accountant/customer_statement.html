@@ -1,0 +1,54 @@
+{% extends "accountant/layout.html" %}
+
+{% block title %}JSGrid and Django Sample{% endblock %}
+
+{% block head %}
+    <link href="http://js-grid.com/css/jsgrid.min.css" rel="stylesheet" />
+    <link href="http://js-grid.com/css/jsgrid-theme.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <div id="jsGrid"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="http://js-grid.com/js/jsgrid.min.js"></script>
+    <script>
+ 
+    $("#jsGrid").jsGrid({
+        width: "90%",
+        height: "400px",
+ 
+        sorting: true,
+        //paging: true,
+        filtering: true,
+ 		autoload: true,
+
+        //data: clients,
+
+        controller: {
+            loadData: function(filter) {
+                var d = $.Deferred();
+                $.ajax({
+                    type: "GET",
+                    url: "/customer_statement/",
+                    data: filter
+                }).done(function(result) {
+                    d.resolve($.map(JSON.parse(result), function(item) {
+                        return $.extend(item.fields, { id: item.pk });
+                    }));
+                });
+                return d.promise();
+            }
+        },
+ 
+        fields: [
+        	{ name: "date", type: "text", width: 100, title: "日期" },
+            { name: "name", type: "text", width: 150, title: "公司用料", autosearch: true},
+            { name: "amount", type: "number", width: 50, title: "重量" },
+            { name: "price", type: "number", width: 50, title: "单价" },
+            { name: "account_payable", type: "number", width: 50, title: "应付" }
+        ]
+    });
+</script>
+{% endblock %}
