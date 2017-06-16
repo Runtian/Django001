@@ -9,7 +9,8 @@ from django.contrib import admin
 # Register your models here.
 from .models import (BurdenSheet, ProductOrder, ProductName, Source,
                      CustomerProduct, ProductPurchase, ProcessingFee,
-                     Payer, Income, Payee, Expense, CustomerProductName)
+                     Payer, Income, Payee, Expense, CustomerProductName,
+                     Account)
 
 
 class ProductOrderInline(admin.TabularInline):
@@ -81,17 +82,26 @@ class ProductPurchaseAdmin(admin.ModelAdmin):
     class Media:
         js = ("js/product_purchase_auto_fill.js",)
 
+
+class IncomeAdmin(admin.ModelAdmin):
+    list_display = ('date', 'payer', 'account', 'description', 'amount')
+
+
+class ExpenseAdmin(admin.ModelAdmin):
+    list_display = ('date', 'Payee', 'account', 'description', 'amount')
+
 admin.site.register(BurdenSheet, BurdenSheetAdmin)
 admin.site.register(ProductPurchase, ProductPurchaseAdmin)
 
 admin.site.register(CustomerProductName)
-admin.site.register(Income)
-admin.site.register(Expense)
+admin.site.register(Income, IncomeAdmin)
+admin.site.register(Expense, ExpenseAdmin)
 
 admin.site.register(Source)
 admin.site.register(ProductName)
 admin.site.register(Payer)
 admin.site.register(Payee)
+admin.site.register(Account)
 
 
 

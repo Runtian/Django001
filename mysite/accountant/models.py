@@ -26,6 +26,14 @@ class Source(models.Model):
 
 
 @python_2_unicode_compatible  # only if you need to support Python 2
+class Account(models.Model):
+    name = models.CharField("账户", max_length=200, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible  # only if you need to support Python 2
 class ProductName(models.Model):
     name = models.CharField("名称", max_length=200, primary_key=True)
 
@@ -64,6 +72,7 @@ class Income(models.Model):
     list_display = ('date', 'payer')
 
     payer = models.ForeignKey(Payer, verbose_name="付款人", null=True, on_delete=models.CASCADE, blank=False)
+    account = models.ForeignKey(Account, verbose_name="收款账户", null=True, on_delete=models.CASCADE, blank=False)
     description = models.CharField("摘要", max_length=200, blank=False)
     amount = models.FloatField("金额", blank=False)
     date = models.DateField("日期", blank=False, default=datetime.date.today)
@@ -83,6 +92,7 @@ class Payee(models.Model):
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class Expense(models.Model):
+    account = models.ForeignKey(Account, verbose_name="付款账户", null=True, on_delete=models.CASCADE, blank=False)
     Payee = models.ForeignKey(Payee, verbose_name="收款人/用途", null=True, on_delete=models.CASCADE, blank=False)
     description = models.CharField("摘要", max_length=200, blank=False)
     amount = models.FloatField("金额", blank=False)
